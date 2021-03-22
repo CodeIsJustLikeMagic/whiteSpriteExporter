@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=whiteSpritesExporter
+X-Python-2-Compatible=false
+Name=White Sprites Exporter
+Comment=Export with color changed to white
