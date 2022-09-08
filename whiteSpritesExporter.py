@@ -1,5 +1,6 @@
 from PyQt5.QtGui import QColor, QImage
 from krita import *
+import os
 from PyQt5.QtWidgets import QFileDialog
 
 class WhiteSpriteExporter(Extension):
@@ -19,7 +20,14 @@ class WhiteSpriteExporter(Extension):
         self.application = Krita.instance()
         self.currentDoc = self.application.activeDocument()
         self.application.setBatchmode(True)
-        self.path = "D:/Eigene Dateien/Dokumente/GitHub/Master/BeatMania/Assets/Resources/BackgroundTextures"
+        self.path = os.environ.get("KritaWhiteSpritesExporter")#"D:/Eigene Dateien/Dokumente/GitHub/Master/BeatMania/Assets/Resources/BackgroundTextures"
+        if self.path is None:
+            self.path = self.currentDoc.fileName()
+            self.saveMessage = "Saved next to .kra file: "+self.path+"\nSet custom save directory with System Enviroment Variable named 'KritaWhiteSpritesExporter'."
+        else:
+            self.path += "/"
+            self.saveMessage = "Saved to custom directory: "+ self.path;
+
 
         self.file = self.currentDoc.fileName()
         self.file = self.file.split('/')[-1]
@@ -50,7 +58,9 @@ class WhiteSpriteExporter(Extension):
 
         self.currentDoc.refreshProjection()
         self.application.setBatchmode(False)
-        QMessageBox.information(self.application.activeWindow().qwindow(), "Done and Done", "All done!")
+        if self.path == "":
+            message = "All done!\nSaved next to "
+        QMessageBox.information(self.application.activeWindow().qwindow(), "All done!", self.saveMessage)
 
     def make_white(self, layer):
         pixelBytes = layer.pixelData(0, 0, self.currentDoc.width(), self.currentDoc.height())
@@ -66,8 +76,12 @@ class WhiteSpriteExporter(Extension):
         layer.setPixelData(bytes(ptr.asarray()), 0, 0, self.currentDoc.width(), self.currentDoc.height())
         self.currentDoc.refreshProjection()
 
-        self.i += 1
-        self.save(layer, self.path+'/'+self.file+str(self.i)+'.png')
+        name = layer.name()
+        if "Layer" in layer.name():
+            self.i += 1
+            name = str(self.i)
+
+        self.save(layer, self.path+self.file+name+'.png')
 
         layer.setPixelData(pixelBytes, 0, 0, self.currentDoc.width(), self.currentDoc.height())
         self.currentDoc.refreshProjection()

@@ -14,13 +14,12 @@ file = file.split('.')[0]
 i= 0
 for layer in nodesList:
     if not layer.locked():# ignore locked layers
-        if layer.childNodes():
-            print(layer.name())
-        else:
-            i +=1
-            name = file+str(i)+('.png')
-            print(name
-            )
-            ret = currentDoc.exportImage(name, InfoObject())
-            print(ret)            
+        print(layer.name())
+        if "Layer" in layer.name():
+            print("basic")
+        i +=1
+        name = file+str(i)+('.png')
+        print(name)
+           # ret = currentDoc.exportImage(name, InfoObject())
+            #print(ret)            
             
