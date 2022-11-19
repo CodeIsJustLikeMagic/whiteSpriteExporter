@@ -1,4 +1,5 @@
-# whiteSpriteExporter
+# whiteSpriteExporter plugin for Krita
+
 Krita plugin for creating white sprite sheets for game development
 
 By default will save sprites in the same folder als .kra file.
